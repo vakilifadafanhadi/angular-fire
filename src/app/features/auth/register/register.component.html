@@ -1,0 +1,34 @@
+<div class="card m-5 col-md-4">
+    <div class="card-body">
+        <h4 class="card-title text-center">
+            REGISTER
+        </h4>
+        <form [formGroup]="formGroup" class="d-flex flex-column align-items-start" (submit)="submit()">
+            <mat-form-field class="w-100">
+                <mat-label>Email</mat-label>
+                <input formControlName="email" matInput placeholder="email@domain.xyz">
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Password</mat-label>
+                <input formControlName="password" matInput [type]="hide ? 'password' : 'text'" placeholder="Password">
+                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                    [attr.aria-pressed]="hide">
+                    <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+            </mat-form-field>
+        </form>
+        <div class="d-flex">
+            <section>
+                <mat-checkbox color="primary">I accept the rules</mat-checkbox>
+            </section>
+        </div>
+        <div class="d-flex flex-row-reverse">
+            <button mat-raised-button color="primary" (click)="submit()">
+                REGISTER
+            </button>
+            <button mat-button color="primary" routerLink="../login">
+                LOGIN
+            </button>
+        </div>
+    </div>
+</div>
