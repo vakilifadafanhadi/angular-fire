@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
@@ -15,7 +16,8 @@ export class RegisterComponent {
   constructor(
     private _authService: AuthService,
     private _formBuilder: FormBuilder,
-    private _router: Router
+    private _router: Router,
+    private _matSnackBar: MatSnackBar
   ) { }
   ngOnInit(): void {
     this.initForm();
@@ -32,6 +34,10 @@ export class RegisterComponent {
         Validators.required,
         Validators.minLength(5)
       ])],
+      confirmPassword: [null, Validators.compose([
+        Validators.required,
+        Validators.minLength(5)
+      ])],
       accept: [false, Validators.required]
     });
   }
@@ -45,12 +51,33 @@ export class RegisterComponent {
         .then((result) => {
           console.log("register", result);
           localStorage.setItem("token", "true");
-          this._router.navigate(["/login"]);
+          this.sendEmailVerification(result.user);
+          this._router.navigate(["/features/auth/login"]);
         })
         .catch(exception => {
-          alert("Somethhing went wrong");
+          this._matSnackBar.open(exception, undefined, {
+            duration: 3000
+          });
           console.warn("exception", exception);
         });
+    }
+    catch (error) {
+      console.error("error", error);
+    }
+    finally {
+      this.loadingButton = false;
+    }
+  }
+  async sendEmailVerification(user: any) {
+    try {
+      this.loadingButton = true;
+      await this._authService.sendEmailVerification(user)
+        .then((result) => {
+          console.log("send email verification", result);
+        })
+        .catch(exception => {
+          console.warn(exception);
+        })
     }
     catch (error) {
       console.error("error", error);

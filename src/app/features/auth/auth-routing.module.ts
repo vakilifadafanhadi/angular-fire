@@ -4,6 +4,7 @@ import { AuthComponent } from './auth.component';
 import { ForgetPasswordComponent } from './forget-password/forget-password.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: "forget-password",
         component: ForgetPasswordComponent
+      },
+      {
+        path: "verify-email",
+        component: VerifyEmailComponent
       },
       {
         path: "",

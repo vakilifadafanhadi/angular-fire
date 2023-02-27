@@ -25,13 +25,13 @@
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
+            <div class="d-flex">
+                <section>
+                    <mat-checkbox #accepted formControlName="accept" color="primary" value="true">I accept the
+                        rules</mat-checkbox>
+                </section>
+            </div>
         </form>
-        <div class="d-flex">
-            <section>
-                <mat-checkbox #accepted formControlName="accept" color="primary" value="true">I accept the
-                    rules</mat-checkbox>
-            </section>
-        </div>
         <div *ngIf="!accepted.checked" class="d-flex">
             <div class="text-danger">
                 you should accept the rules to register

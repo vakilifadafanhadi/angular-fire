@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./verify-email.component.less']
 })
 export class VerifyEmailComponent {
+  loadingButton: boolean = false;
+  resendVerificationEmail() {
 
+  }
 }

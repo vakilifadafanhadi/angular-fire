@@ -1,7 +1,123 @@
-<p>dashboard works!</p>
 <button [disabled]="loadingButton" mat-button color="primary" (click)="logout()">
     <span *ngIf="!loadingButton">
         LOGOUT
     </span>
     <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
 </button>
+<div class="row m-5">
+    <div class="col-3">
+        <div class="card">
+            <div class="card-body">
+                <form [formGroup]="formGroup" class="d-flex flex-column align-items-start">
+                    <mat-form-field class="w-100">
+                        <mat-label>First Name</mat-label>
+                        <input formControlName="first_name" matInput placeholder="First Name">
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Last Name</mat-label>
+                        <input formControlName="last_name" matInput placeholder="Last Name">
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Email</mat-label>
+                        <input formControlName="email" matInput placeholder="email">
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Mobile</mat-label>
+                        <input formControlName="mobile" matInput placeholder="Mobile">
+                    </mat-form-field>
+                </form>
+                <button [disabled]="loadingButton" mat-raised-button color="primary" (click)="create()">
+                    <span *ngIf="!loadingButton&&formGroup.get('id')?.value==''">
+                        ADD
+                    </span>
+                    <span *ngIf="!loadingButton&&formGroup.get('id')?.value!=''">
+                        UPDATE
+                    </span>
+                    <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
+                </button>
+                <button [disabled]="loadingButton" *ngIf="formGroup.get('id')?.value!=''" class="mx-2" mat-raised-button
+                    (click)="resetForm()">
+                    <span *ngIf="!loadingButton">
+                        CANCEL
+                    </span>
+                    <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="col-9">
+        <table mat-table [dataSource]="studentsList" class="mat-elevation-z8">
+            <form [formGroup]="formGroup" class="d-flex flex-column align-items-start">
+                <mat-form-field class="w-100">
+                    <mat-label>First Name</mat-label>
+                    <input formControlName="first_name" matInput placeholder="First Name">
+                </mat-form-field>
+                <mat-form-field class="w-100">
+                    <mat-label>Last name</mat-label>
+                    <input formControlName="last_name" matInput placeholder="Last Name">
+                </mat-form-field>
+                <mat-form-field class="w-100">
+                    <mat-label>email</mat-label>
+                    <input formControlName="email" matInput placeholder="email">
+                </mat-form-field>
+                <mat-form-field class="w-100">
+                    <mat-label>mobile</mat-label>
+                    <input formControlName="mobile" matInput placeholder="mobile">
+                </mat-form-field>
+            </form>
+            <button [disabled]="loadingButton||formGroup.invalid" mat-raised-button color="primary" (click)="create()">
+                <span *ngIf="!loadingButton">
+                    ADD
+                </span>
+                <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
+            </button>
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="first_name">
+                <th mat-header-cell *matHeaderCellDef> First Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.first_name}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="last_name">
+                <th mat-header-cell *matHeaderCellDef> Last Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.last_name}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef> Email </th>
+                <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+            </ng-container>
+
+            <!-- Symbol Column -->
+            <ng-container matColumnDef="mobile">
+                <th mat-header-cell *matHeaderCellDef> Mobile </th>
+                <td mat-cell *matCellDef="let element"> {{element.mobile}} </td>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let element">
+                    <button class="me-2" mat-mini-fab color="warn" aria-label="Example icon button with a delete icon"
+                        (click)="delete(element)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                    <button mat-mini-fab color="accent" aria-label="Example icon button with a delete icon"
+                        (click)="select(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

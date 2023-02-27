@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth'
-import { Router } from '@angular/router';
-import { BehaviorSubject } from 'rxjs';
-
+import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { GoogleAuthProvider } from '@angular/fire/auth';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,5 +16,14 @@ export class AuthService {
   }
   logout(): Promise<any> {
     return this._fireAuth.signOut();
+  }
+  forgetPassword(email: string): Promise<any> {
+    return this._fireAuth.sendPasswordResetEmail(email);
+  }
+  sendEmailVerification(user: any): Promise<any> {
+    return user.sendEmailVerification();
+  }
+  googleSignIn() {
+    return this._fireAuth.signInWithPopup(new GoogleAuthProvider);
   }
 }

@@ -1,1 +1,9 @@
-<p>verify-email works!</p>
+<p>
+    Link has sent on your registered email.
+</p>
+<button [disabled]="loadingButton" mat-button color="primary" (click)="resendVerificationEmail()">
+    <span *ngIf="!loadingButton">
+        RESEND
+    </span>
+    <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
+</button>

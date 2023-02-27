@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatCheckbox } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +14,7 @@ export class LoginComponent implements OnInit {
   hide: boolean = true;
   formGroup!: FormGroup;
   loadingButton: boolean = false;
+  @ViewChild('keepSignedIn') keepSignedIn: any;
   constructor(
     private _authService: AuthService,
     private _formBuilder: FormBuilder,
@@ -49,8 +51,16 @@ export class LoginComponent implements OnInit {
       )
         .then((result) => {
           console.log("login", result);
-          localStorage.setItem("token", "true");
-          this._router.navigate(["dashboard"]);
+          if (result.user?.emailVerified == true) {
+            console.log("keep", this.keepSignedIn._checked);
+            if (this.keepSignedIn._checked)
+              localStorage.setItem("token", "true");
+            else sessionStorage.setItem("token", "true")
+            this._router.navigate(["dashboard"]);
+          }
+          else {
+            this._router.navigate(["/features/auth/verify-email"]);
+          }
         })
         .catch(exception => {
           this._snackBar.open(exception, undefined, {
@@ -65,6 +75,26 @@ export class LoginComponent implements OnInit {
     }
     finally {
       this.loadingButton = false;
+    }
+  }
+  signInWithGoogle() {
+    this.loadingButton = true;
+    try {
+      this._authService.googleSignIn()
+        .then(result => {
+          console.log("signInWithGoogle", result);
+          localStorage.setItem("token", JSON.stringify(result.user?.uid));
+          this._router.navigate(["dashboard"]);
+        })
+        .catch(exception => {
+          console.warn(exception);
+        });
+    }
+    catch (error) {
+      console.error("error", error);
+    }
+    finally {
+      this.loadingButton = false
     }
   }
 }

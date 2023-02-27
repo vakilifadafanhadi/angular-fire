@@ -28,19 +28,38 @@ export class ForgetPasswordComponent implements OnInit {
   async submit() {
     this.loadingButton = true;
     try {
-      await this._authService.register(
-        this.formGroup.get("email")?.value,
-        this.formGroup.get("password")?.value
+      await this._authService.forgetPassword(
+        this.formGroup.get("email")?.value
       )
         .then((result) => {
           console.log("register", result);
           localStorage.setItem("token", "true");
           this._router.navigate(["/login"]);
+          this.sendEmailVerification();
         })
         .catch(exception => {
           alert("Somethhing went wrong");
           console.warn("exception", exception);
         });
+    }
+    catch (error) {
+      console.error("error", error);
+    }
+    finally {
+      this.loadingButton = false;
+    }
+  }
+  async sendEmailVerification() {
+    try {
+      this.loadingButton = true;
+      await this._authService.sendEmailVerification(this.formGroup.get("email")?.value)
+        .then((result) => {
+          console.log("send email verification", result);
+          this._router.navigate(["/verify-email"]);
+        })
+        .catch(exception => {
+          console.warn(exception);
+        })
     }
     catch (error) {
       console.error("error", error);

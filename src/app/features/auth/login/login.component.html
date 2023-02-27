@@ -59,7 +59,7 @@
         </form>
         <div class="d-flex">
             <section>
-                <mat-checkbox color="primary" formControlName="accept" required>keep me signed
+                <mat-checkbox color="primary" #keepSignedIn required>keep me signed
                     in</mat-checkbox>
             </section>
         </div>
@@ -78,6 +78,13 @@
             <button mat-button color="primary" routerLink="../forget-password">
                 Forget password
             </button>
+        </div>
+        <div class="row mt-2">
+            <div class="card text-center" role="button" (click)="signInWithGoogle()">
+                <div class="card-body">
+                    Google sign in
+                </div>
+            </div>
         </div>
     </div>
 </div>
