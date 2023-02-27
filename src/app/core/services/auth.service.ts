@@ -1,50 +1,22 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth'
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
   constructor(
-    private _fireAuth: AngularFireAuth,
-    private _router: Router
+    private _fireAuth: AngularFireAuth
   ) { }
-  login(email: string, password: string) {
-    this._fireAuth.signInWithEmailAndPassword(email, password).then((result) => {
-      console.log("login", result);
-      localStorage.setItem("token", "true");
-      this._router.navigate(["dashboard"]);
-    },
-      error => {
-        alert("Somethhing went wrong");
-        console.error("error", error);
-        this._router.navigate(["/login"]);
-      });
+  login(email: string, password: string): Promise<any> {
+    return this._fireAuth.signInWithEmailAndPassword(email, password);
   }
-  register(email: string, password: string) {
-    this._fireAuth.createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        console.log("register", result);
-        localStorage.setItem("token", "true");
-        this._router.navigate(["/login"]);
-      },
-        error => {
-          alert("Somethhing went wrong");
-          console.error("error", error);
-        });
+  register(email: string, password: string): Promise<any> {
+    return this._fireAuth.createUserWithEmailAndPassword(email, password);
   }
-  logout() {
-    this._fireAuth.signOut().then((result) => {
-      console.log("register", result);
-      localStorage.removeItem("token");
-      this._router.navigate(["../login"]);
-    },
-      error => {
-        alert("Somethhing went wrong");
-        console.error("error", error);
-        this._router.navigate(["../login"]);
-      });
+  logout(): Promise<any> {
+    return this._fireAuth.signOut();
   }
 }

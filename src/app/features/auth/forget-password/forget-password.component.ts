@@ -1,17 +1,16 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.less']
+  selector: 'app-forget-password',
+  templateUrl: './forget-password.component.html',
+  styleUrls: ['./forget-password.component.less']
 })
-export class RegisterComponent {
-  hide: boolean = true;
-  formGroup!: FormGroup;
+export class ForgetPasswordComponent implements OnInit {
   loadingButton: boolean = false;
+  formGroup!: FormGroup;
   constructor(
     private _authService: AuthService,
     private _formBuilder: FormBuilder,
@@ -22,17 +21,8 @@ export class RegisterComponent {
   }
   initForm() {
     this.formGroup = this._formBuilder.group({
-      email: [null, Validators.compose([
-        Validators.required,
-        Validators.email,
-        Validators.minLength(5),
-        Validators.maxLength(360)
-      ])],
-      password: [null, Validators.compose([
-        Validators.required,
-        Validators.minLength(5)
-      ])],
-      accept: [false, Validators.required]
+      email: [null],
+      password: [null]
     });
   }
   async submit() {

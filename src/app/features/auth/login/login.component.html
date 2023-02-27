@@ -6,8 +6,28 @@
         <form [formGroup]="formGroup" class="d-flex flex-column align-items-start" (submit)="submit()">
             <mat-form-field class="w-100">
                 <mat-label>Email</mat-label>
-                <input formControlName="email" matInput placeholder="email@domain.xyz">
+                <input formControlName="email" matInput placeholder="email@domain.xyz" required>
             </mat-form-field>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'Email is required',
+                control: formGroup.controls['email']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'email',
+                message: 'Email is invalid',
+                control: formGroup.controls['email']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'minLength',
+                message: 'Email should have at least 5 symbols',
+                control: formGroup.controls['email']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'maxLength',
+                message: 'Email should have maximum 360 symbols',
+                control: formGroup.controls['email']
+              }"></ng-container>
             <mat-form-field class="w-100">
                 <mat-label>Password</mat-label>
                 <input formControlName="password" matInput [type]="hide ? 'password' : 'text'" placeholder="Password">
@@ -16,15 +36,39 @@
                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
             </mat-form-field>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'required',
+                message: 'Password is required',
+                control: formGroup.controls['password']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'pattern',
+                message: 'Password is invalid',
+                control: formGroup.controls['password']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'minLength',
+                message: 'Password should have at least 5 symbols',
+                control: formGroup.controls['password']
+              }"></ng-container>
+            <ng-container [ngTemplateOutlet]="formError" [ngTemplateOutletContext]="{
+                validation: 'maxLength',
+                message: 'Password should have maximum 360 symbols',
+                control: formGroup.controls['password']
+              }"></ng-container>
         </form>
         <div class="d-flex">
             <section>
-                <mat-checkbox color="primary">keep me signed in</mat-checkbox>
+                <mat-checkbox color="primary" formControlName="accept" required>keep me signed
+                    in</mat-checkbox>
             </section>
         </div>
         <div class="d-flex flex-row-reverse">
-            <button mat-raised-button color="primary" (click)="submit()">
-                LOGIN
+            <button [disabled]="loadingButton||formGroup.invalid" mat-raised-button color="primary" (click)="submit()">
+                <span *ngIf="!loadingButton">
+                    LOGIN
+                </span>
+                <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
             </button>
             <button mat-button color="primary" routerLink="../register">
                 REGISTER
@@ -37,3 +81,12 @@
         </div>
     </div>
 </div>
+<ng-template #formError let-control="control" let-message="message" let-validation="validation">
+    <ng-container *ngIf="control.hasError(validation) && (control.dirty || control.touched)">
+        <div class="text-danger">
+            <span role="alert">
+                {{ message }}
+            </span>
+        </div>
+    </ng-container>
+</ng-template>

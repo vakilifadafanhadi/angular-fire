@@ -1,4 +1,7 @@
 <p>dashboard works!</p>
-<button (click)="logout()">
-    logout
+<button [disabled]="loadingButton" mat-button color="primary" (click)="logout()">
+    <span *ngIf="!loadingButton">
+        LOGOUT
+    </span>
+    <mat-spinner *ngIf="loadingButton" diameter="20"></mat-spinner>
 </button>
